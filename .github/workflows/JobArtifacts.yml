@@ -44,6 +44,9 @@ jobs:
       - name: Deploy
         run: echo "Deploying..."
 
+
+
+#RUNNING LOCALLY TO VERIFY IF IT WORKS PROPERLY:        
 #After running a build job, it will produce files.
 #We can take a look at these files locally by running commands on the terminal:
 #npm install

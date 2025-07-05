@@ -46,11 +46,14 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: dist-files 
-      - name: Output contents. List of all folders that are available in 
+#We can see all files in a dist-files folder:
+      - name: Output contents. List of all folders that are available in this folder dist-files (artifacts)
         run: ls
       - name: Deploy
         run: echo "Deploying..."
+#We can download artifacts manually & automatically
 
+#RUNNING LOCALLY TO VERIFY IF IT WORKS PROPERLY:        
 #After running a build job, it will produce files.
 #We can take a look at these files locally by running commands on the terminal:
 #npm install
