@@ -75,4 +75,5 @@ jobs:
         run: echo "Deploying..."
 
 
-#RUNNING LOCALLY TO VERIFY IF IT WORKS PROPERLY
+#We can see at Workflows. We can see a Install Dependencies step takes less time in a build job
+#
