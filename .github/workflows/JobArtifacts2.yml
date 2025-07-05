@@ -27,7 +27,7 @@ jobs:
         run: npm run build
 #This job creates a job artifact - some files
 #To store locally files that are produced by a build job, we need to add this step action - upload artifacts.
-#We add a name to artifact - dist-files, a path to describe where to find all files (artifacts) that are created.
+#We add a name to artifact - dist-files, a path to describe where to find all files (artifacts) that are created to upload.
 #Thanks to this step, we store all files (artifacts) in a dist-files folder that were found
 #They are located in a workflow. We can download it (access manually)
       - name: Upload artifacts
@@ -43,7 +43,7 @@ jobs:
 #Each job runs in another runner machines. To hold artifacts created by a build job, we need to download these artifacts. 
 #We need to specify a folder that will be downloaded. Thus, this files will be available in a deploy job
       - name: Get build artifacts
-        uses: actions/download-artifacts@v4
+        uses: actions/download-artifact@v4
         with:
           name: dist-files 
       - name: Output contents. List of all folders that are available in 
