@@ -1,4 +1,4 @@
-name: Third Job Outputs
+name: Third Job Output
 on:
   push:
     branches:

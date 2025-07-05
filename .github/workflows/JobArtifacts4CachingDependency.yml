@@ -1,0 +1,78 @@
+name: Fourth Cache Dependency Job Artifacts
+on:
+  push:
+    branches:
+      - main
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+# We want to cache these dependencies that this cached dependencies can be used in subsequent workflows
+#Unless these dependecies changed must be reinstalled.continue-on-error: 
+#Adding Caching - add a new step before the step that actually produces files that should be cached
+#This action needs some configuration: with - to specify paths that point files and folders should be cached
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+            path: ~/.npm
+            key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+#This npm created cache folder should be stored on GitHub server 
+#and reused in either other jobs or other Workflow executions
+#We reference to thispackage-lock.json file since it specifies all the dependencies of this project and the exact verions
+#of these dependencies
+      - name: Install dependencies
+        run: npm ci
+      - name: Lint code
+        run: npm run lint
+      - name: Test code
+        run: npm run test
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    outputs:
+        script-file1: ${{ steps.publish.outputs.script-file }}
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+#We need to repeat this step in all jobs that do install dependencies
+#The cache action uses one central cache
+#We are going to cache these dependencies here.
+#We put these dependencies into the cache in the job test already
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+            path: ~/.npm
+            key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+#a job build will use the same cache because one central cache is available across Workflow executions
+#Therefore, if dependencies were cached in one job, there will be available in other jobs/Workflow execution cycles
+      - name: Install dependencies
+        run: npm ci
+      - name: Build website
+        run: npm run build
+      - name: Publish JS filename
+        id: publish
+        run: find dist/assets/*.js -type f -execdir echo 'script-file={}' >> $GITHUB_OUTPUT ';'
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-files
+          path: dist
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-files 
+      - name: Output contents. List of all folders that are available in this folder dist-files (artifacts)
+        run: ls
+      - name: Output filename
+        run: echo '${{ needs.build.outputs.script-file1 }}'
+      - name: Deploy
+        run: echo "Deploying..."
+
+
+#RUNNING LOCALLY TO VERIFY IF IT WORKS PROPERLY
