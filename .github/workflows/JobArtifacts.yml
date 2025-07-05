@@ -28,7 +28,8 @@ jobs:
 #This job creates a job artifact - called a dist folder (we created the same folder by running commands on the terminal)
 #To store this folder (artifacts) that are produced by a build job, we need to add this step action - upload artifacts.
 #We add a name to artifact - dist-files,
-#Then, we define a path to describe where to find this folder (artifacts - a dist folder)
+#Then, we define a path to describe where to find this folder (artifacts - a dist folder).
+#A dist folder is created by a job build in the same directory as the repository
 #which are created by this job to upload in a dist-files folder
 #Thanks to this step, we store all a file package.json and a dist folder in a dist-files folder that were found
 #They are located in a workflow. We can download it (access manually)
