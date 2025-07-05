@@ -30,7 +30,7 @@ jobs:
 #We add a name to artifact - dist-files,a path describes where to find files that should be stored.
 #We store this file in a dist folder   
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: dist-files
           path: |
