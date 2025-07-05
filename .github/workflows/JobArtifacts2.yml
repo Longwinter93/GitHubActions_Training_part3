@@ -25,11 +25,14 @@ jobs:
         run: npm ci
       - name: Build website
         run: npm run build
-#This job creates a job artifact - some files
-#To store locally files that are produced by a build job, we need to add this step action - upload artifacts.
-#We add a name to artifact - dist-files, a path to describe where to find all files (artifacts) that are created to upload.
+#This job creates a job artifact - called a dist folder (we created the same folder by running commands on the terminal)
+#To store this folder that is produced by a build job, we need to add this step action - upload artifacts.
+#We add a name to artifact - dist-files,
+#Then, we define a path to describe where to find this folder (artifacts - a dist folder) 
+#which are created by this job to upload in a dist-files folder.
 #Thanks to this step, we store all files (artifacts) in a dist-files folder that were found
 #They are located in a workflow. We can download it (access manually)
+##Finally, we have all artifacts (a dist folder that was created on the terminal) in a dist-files
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -46,7 +49,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: dist-files 
-#We can see all files in a dist-files folder:
+#We can see all files in a dist folder that corresponds to a dist-files folder :
       - name: Output contents. List of all folders that are available in this folder dist-files (artifacts)
         run: ls
       - name: Deploy
