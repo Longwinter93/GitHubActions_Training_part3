@@ -69,3 +69,4 @@ jobs:
 #If we run this workflow on GitHub Actions - these files are produced on the runner machine
 #If the workflow is finished, the runner machine will be shutdown - these files will be lost
 #Therefore, we want to store these files locally after the runner machine will be shut down
+#A created artifacts dist-files (a file) can be downloaded from this workflow on GitHub Action website
