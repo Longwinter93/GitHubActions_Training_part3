@@ -84,6 +84,15 @@ jobs:
         run: echo "Deploying..."
 
 
-#We can see at Workflows. We can see a Install Dependencies step takes less time in a build job
-#This step should finish much faster
-#In a Cache Dependencies we have a key <- make notes
+#We can see at Workflows on GitHub Action.
+#After first running workflows, there is no input keys (hash) in a Cache dependencies in a test job
+#In a Post Cache dependencies step in a test job, we can see that a hash key was generated
+#A cached was saved, therefore in this workflow
+#Thus, we can see a Install Dependencies step in a build job takes less time - it goes faster
+#If we go to a Cache Dependencies step in a build job, a cached was downloaded and restored it - we can see a hash key
+#Then, the dependencies were installed.
+#A Install dependencies step, npm uses  that cache folder that was recreated by the Cache Dependencies steps
+
+#Rerunning this workflow again
+#In each job in each step - cache was restored
+#If we update our dependencies, a new hash key will be restored and old cached will be discarded.
