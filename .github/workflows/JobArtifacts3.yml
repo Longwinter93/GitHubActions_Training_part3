@@ -18,8 +18,15 @@ jobs:
   build:
     needs: test
     runs-on: ubuntu-latest
+#To generate and share this output, we need to add a new key
+#We map a step output to a job output. Output allows us to definy any outputs
+#We define the script-file1 output. It is an identifier that will be able to access the output value.
+#script-file is a step output
     outputs:
         script-file1: ${{ steps.publish.outputs.script-file }}
+#We add expressions to set an overall output for the job and a steps context. A step context - info about our steps
+#We add id - 'publish' to this step to have access to this step. Adding .publish, we simply reference to this unique id
+#outputs.script-file <- name of this output that were defined -> script-file
     steps:
       - name: Get code
         uses: actions/checkout@v3
@@ -29,15 +36,22 @@ jobs:
         run: npm run build
 #Get the JS file name. It is a regular linux command to find a JavaScript file in a assets folder in the dist folder
 #Then, it executes the echo command to output that file name
+#To set output value for this step, we put the name of the step output name -> script-file
+#{} it is a special placeholder which it contains our JavaScriptName
+#we add this id from a steps context to access this data from this step by this ID:
       - name: Publish JS filename
         id: publish
         run: find dist/assets/*.js -type f -execdir echo 'script-file={}' >> $GITHUB_OUTPUT ';'
+#$GITHUB_OUTPUT - it is a special file created by Github in the environment where the output key-value pair is written
+#It writes the output to a file, a file which path is tored in this special variable.
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: dist-files
           path: dist
+#We can simply set an output in a step, then reference thath output for setting an output for the overall job
   deploy:
+#we use build as an identifier in a needs context
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -47,11 +61,16 @@ jobs:
           name: dist-files 
       - name: Output contents. List of all folders that are available in this folder dist-files (artifacts)
         run: ls
-#We add a next step. I use the output by the build job. A needs object cotaints the outputs of all jobs
+#After publishing output from a build job, we want to use this output in this deploy job
+#We add a next step. I use the output by the build job.
+#We use an expression and a needs.<job-id>.outputs context that contain the outputs of all jobs
+#Then, we add outputs and the output identifier specified in 26 lines -> script-file1
       - name: Output filename
         run: echo '${{ needs.build.outputs.script-file1 }}'
+#It should display the file name published by another job
       - name: Deploy
         run: echo "Deploying..."
 
+#We are able to pass data between jobs
 
-#RUNNING LOCALLY TO VERIFY IF IT WORKS PROPERLY
+
