@@ -9,19 +9,28 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v3
-# We want to cache these dependencies that this cached dependencies can be used in subsequent workflows
+#We intend to shorten a Install Dependencies step because it is the slowest
+#Thanks to that, we can save money and time
+#We need to install this dependencies on each step, thus we want to avoid it
+#We want to cache these dependencies that this cached dependencies can be used in subsequent workflows
 #Unless these dependecies changed must be reinstalled.continue-on-error: 
-#Adding Caching - add a new step before the step that actually produces files that should be cached
+#Adding Caching - add a new step before the step that actually produces files that should be cached -> Install dependencies
 #This action needs some configuration: with - to specify paths that point files and folders should be cached
+#~/npm - this is a path used by npm tool for its interal dependancy cache
+
       - name: Cache dependencies
         uses: actions/cache@v3
         with:
             path: ~/.npm
             key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
-#This npm created cache folder should be stored on GitHub server 
+#path -> This npm created cache folder should be stored on GitHub server 
 #and reused in either other jobs or other Workflow executions
-#We reference to thispackage-lock.json file since it specifies all the dependencies of this project and the exact verions
-#of these dependencies
+#We must give this cache a key - this key will be used to retrieve the cache in the future and recreate the folder on the runner machine
+#This key also indicates that it must be recreated because for example some dependancy changed
+#We add a hashFiles expression - to produce unique hash values based on a file path - the context of the package-lock.json file
+#We reference to this package-lock.json file since it specifies all the dependencies of this project and the exact verions
+#of these dependencies. If any of dependencies are changed, a hash key is also changed
+#If new dependencies were installed, a new dependencies will be cached again
       - name: Install dependencies
         run: npm ci
       - name: Lint code
@@ -39,7 +48,7 @@ jobs:
 #We need to repeat this step in all jobs that do install dependencies
 #The cache action uses one central cache
 #We are going to cache these dependencies here.
-#We put these dependencies into the cache in the job test already
+#We placed these dependencies into the cache in the job test already
       - name: Cache dependencies
         uses: actions/cache@v3
         with:

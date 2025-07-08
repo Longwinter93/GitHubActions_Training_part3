@@ -1,4 +1,4 @@
-name: Third Job Output
+name: Third Passing Information between Jobs Job Output
 on:
   push:
     branches:
@@ -70,7 +70,6 @@ jobs:
 #It should display the file name published by another job
       - name: Deploy
         run: echo "Deploying..."
-
 #We are able to pass data between jobs
-
-
+#On a build job on the steps, we can see this output name
+#On GitHub Action on this workflow on a deploy job on a Output filename step, we can see this filename 
