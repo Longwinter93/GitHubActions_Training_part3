@@ -37,7 +37,7 @@ jobs:
 #Get the JS file name. It is a regular linux command to find a JavaScript file in a assets folder in the dist folder
 #Then, it executes the echo command to output that file name
 #To set output value for this step, we put the name of the step output name -> script-file
-#{} it is a special placeholder which it contains our JavaScriptName
+# {} it is a special placeholder which it contains our JavaScriptName
 #we add this id from a steps context to access this data from this step by this ID:
       - name: Publish JS filename
         id: publish
