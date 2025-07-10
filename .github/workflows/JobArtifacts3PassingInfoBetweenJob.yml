@@ -49,7 +49,7 @@ jobs:
         with:
           name: dist-files
           path: dist
-#We can simply set an output in a step, then reference thath output for setting an output for the overall job
+#We can simply set an output in a step, then reference that output for setting an output for the overall job
   deploy:
 #we use build as an identifier in a needs context
     needs: build
